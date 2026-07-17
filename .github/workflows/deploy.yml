@@ -3,8 +3,8 @@ name: Deploy
 # Prod API deploy to arcana-prod is OPERATOR-GATED (manual dispatch only).
 # push->main runs CI (ci.yml) but MUST NOT auto-deploy the API: the first prod
 # rollout requires a verified wiki_arcana DB backup + the schema v0 migration
-# applied out-of-band (see datarim/plans/WIKI-0001-plan.md Step 19). Flip to a
-# push trigger only after the operator confirms that gate is satisfied.
+# applied out-of-band. Flip to a push trigger only after the operator confirms
+# that gate is satisfied.
 on:
   workflow_dispatch:
 
