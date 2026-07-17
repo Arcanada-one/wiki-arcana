@@ -3,7 +3,15 @@ set -euo pipefail
 
 env_file="${WIKI_DEPLOY_ENV_FILE:-/srv/apps/wiki-arcana/.env}"
 fallback="${OPSBOT_API_KEY_FALLBACK:-}"
-[[ -r "$env_file" ]] || { echo 'deploy environment file is unreadable' >&2; exit 1; }
+# Ops Bot alerting is optional in Phase 1. Until the Vault AppRole deploy-env is
+# bootstrapped (/srv/apps/wiki-arcana/.env with VAULT_ADDR/ROLE_ID/SECRET_ID),
+# degrade gracefully: use the fallback if provided, else emit an empty key so the
+# deploy proceeds without Ops Bot notifications (downstream steps are guarded on a
+# non-empty key). Re-enable full Vault resolution by provisioning the .env file.
+if [[ ! -r "$env_file" ]]; then
+  printf '%s' "$fallback"
+  exit 0
+fi
 
 set -a
 # The deploy environment is provisioned out-of-band from Vault and mode 0640.

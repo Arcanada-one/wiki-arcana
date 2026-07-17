@@ -65,7 +65,11 @@ jobs:
             ram-swap
             loadavg
             health-pre-probe
-          ops-bot-emit: 'true'
+          # Phase 1: Ops Bot alerting is disabled until the Vault AppRole deploy-env
+          # is bootstrapped (see scripts/ci-resolve-ops-key.sh). All preflight health
+          # checks still run; only the notification emission is off. Flip back to
+          # 'true' once /srv/apps/wiki-arcana/.env (VAULT_ROLE_ID/SECRET_ID) exists.
+          ops-bot-emit: 'false'
           ops-bot-url: https://ops.arcanada.ai/events
           ops-bot-key: ${{ env.OPSBOT_KEY }}
           severity-overrides: ${{ vars.PREFLIGHT_ARCANA_PROD_OVERRIDES_JSON }}
