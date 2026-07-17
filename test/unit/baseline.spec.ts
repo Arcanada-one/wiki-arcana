@@ -13,7 +13,7 @@ describe('server baseline', () => {
       LTM_API_URL: 'https://memory.internal.example',
     });
     expect(config.HOST).toBe('127.0.0.1');
-    expect(config.PORT).toBe(4100);
+    expect(config.PORT).toBe(4110);
   });
 
   it('rejects a non-loopback bind', () => {

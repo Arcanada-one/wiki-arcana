@@ -13,7 +13,7 @@ export const ServiceUrlSchema = z.url().superRefine((value, context) => {
 
 export const AppConfigSchema = z.object({
   HOST: z.literal('127.0.0.1').default('127.0.0.1'),
-  PORT: z.coerce.number().int().min(1).max(65535).default(4100),
+  PORT: z.coerce.number().int().min(1).max(65535).default(4110),
   AUTH_ISSUER_URL: z.url().refine(isHttpsUrl, 'AUTH_ISSUER_URL must use HTTPS'),
   AUTH_AUDIENCE: z.url().refine(isHttpsUrl, 'AUTH_AUDIENCE must use HTTPS'),
   AUTH_JWKS_URL: z.url().refine(isHttpsUrl, 'AUTH_JWKS_URL must use HTTPS'),

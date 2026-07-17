@@ -20,5 +20,5 @@ mv -Tf "$deploy_root/current.next" "$deploy_root/current"
 sudo install -m 0644 deploy/systemd/wiki-arcana.service /etc/systemd/system/wiki-arcana.service
 sudo systemctl daemon-reload
 sudo systemctl restart wiki-arcana.service
-curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4100/health >/dev/null
-curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4100/version >/dev/null
+curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4110/health >/dev/null
+curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4110/version >/dev/null

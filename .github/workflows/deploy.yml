@@ -74,8 +74,8 @@ jobs:
       - name: Post-deploy health
         run: |
           set -euo pipefail
-          curl -fsS --max-time 15 http://127.0.0.1:4100/health
-          curl -fsS --max-time 15 http://127.0.0.1:4100/version
+          curl -fsS --max-time 15 http://127.0.0.1:4110/health
+          curl -fsS --max-time 15 http://127.0.0.1:4110/version
       - name: Emit deduplicated fatal evidence
         if: failure() && env.OPSBOT_KEY != ''
         env:
