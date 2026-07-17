@@ -1,0 +1,16 @@
+DROP TRIGGER IF EXISTS "space_grants_recompute" ON "space_grants";
+DROP TRIGGER IF EXISTS "knowledge_spaces_recompute" ON "knowledge_spaces";
+DROP FUNCTION IF EXISTS "grants_after_mutation"();
+DROP FUNCTION IF EXISTS "spaces_after_mutation"();
+DROP FUNCTION IF EXISTS "recompute_effective_permissions"();
+DROP FUNCTION IF EXISTS "rebuild_space_closure"();
+DROP TABLE IF EXISTS "effective_permissions";
+DROP TABLE IF EXISTS "space_grants";
+DROP TABLE IF EXISTS "space_closure";
+DROP TABLE IF EXISTS "knowledge_spaces";
+DROP TABLE IF EXISTS "access_levels";
+DROP TABLE IF EXISTS "_prisma_migrations";
+DROP TYPE IF EXISTS "capability";
+DROP TYPE IF EXISTS "grant_effect";
+DROP TYPE IF EXISTS "subject_type";
+DROP TYPE IF EXISTS "isolation_mode";

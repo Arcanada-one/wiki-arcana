@@ -1,0 +1,1 @@
+export const OIDC_TOKEN_VERIFIER = Symbol('OIDC_TOKEN_VERIFIER');

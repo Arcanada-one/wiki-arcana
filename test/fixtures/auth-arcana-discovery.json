@@ -1,0 +1,6 @@
+{
+  "issuer": "https://auth.arcanada.one",
+  "jwks_uri": "https://auth.arcanada.one/oidc/jwks",
+  "authorization_endpoint": "https://auth.arcanada.one/oidc/auth",
+  "token_endpoint": "https://auth.arcanada.one/oidc/token"
+}

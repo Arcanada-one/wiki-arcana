@@ -1,0 +1,23 @@
+[Unit]
+Description=Wiki Arcana API and MCP service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=wiki-arcana
+Group=wiki-arcana
+WorkingDirectory=/srv/apps/wiki-arcana/current
+EnvironmentFile=/etc/wiki-arcana/environment
+ExecStart=/usr/bin/node dist/src/main.js
+Restart=on-failure
+RestartSec=5s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/apps/wiki-arcana
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

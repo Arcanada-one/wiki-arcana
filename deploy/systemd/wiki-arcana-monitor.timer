@@ -1,0 +1,12 @@
+[Unit]
+Description=Run Wiki Arcana external health monitor every five minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=30s
+Persistent=true
+Unit=wiki-arcana-monitor.service
+
+[Install]
+WantedBy=timers.target

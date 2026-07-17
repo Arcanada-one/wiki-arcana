@@ -1,0 +1,7 @@
+{
+  "status": "ok",
+  "model": "BAAI/bge-m3",
+  "dimension": 1024,
+  "fp16": true,
+  "ram_mb": 1119
+}

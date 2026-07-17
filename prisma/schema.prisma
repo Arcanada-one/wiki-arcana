@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum IsolationMode {
+  linked
+  compartmented
+
+  @@map("isolation_mode")
+}
+
+enum SubjectType {
+  user
+  role
+
+  @@map("subject_type")
+}
+
+enum GrantEffect {
+  allow
+  deny
+
+  @@map("grant_effect")
+}
+
+enum Capability {
+  read
+  write
+  admin
+
+  @@map("capability")
+}
+
+model AccessLevel {
+  slug        String @id @db.Text
+  ordinal     Int    @unique
+  displayName String @map("display_name") @db.Text
+  description String @db.Text
+
+  spaces KnowledgeSpace[]
+
+  @@map("access_levels")
+}
+
+model KnowledgeSpace {
+  id            String        @id @db.Uuid
+  slug          String        @unique @db.Text
+  name          String        @db.Text
+  description   String?       @db.Text
+  parentId      String?       @map("parent_id") @db.Uuid
+  requiredLevel String        @map("required_level") @db.Text
+  isolationMode IsolationMode @default(linked) @map("isolation_mode")
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  parent      KnowledgeSpace?  @relation("space_tree", fields: [parentId], references: [id])
+  children    KnowledgeSpace[] @relation("space_tree")
+  accessLevel AccessLevel      @relation(fields: [requiredLevel], references: [slug])
+
+  @@map("knowledge_spaces")
+}
+
+model SpaceClosure {
+  ancestorId   String @map("ancestor_id") @db.Uuid
+  descendantId String @map("descendant_id") @db.Uuid
+  depth        Int
+
+  @@id([ancestorId, descendantId])
+  @@map("space_closure")
+}
+
+model SpaceGrant {
+  id          String      @id @db.Uuid
+  spaceId     String      @map("space_id") @db.Uuid
+  subjectType SubjectType @map("subject_type")
+  subjectId   String      @map("subject_id") @db.Text
+  effect      GrantEffect
+  capability  Capability
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@unique([spaceId, subjectType, subjectId, effect, capability])
+  @@map("space_grants")
+}
+
+model EffectivePermission {
+  spaceId    String     @map("space_id") @db.Uuid
+  subjectId  String     @map("subject_id") @db.Text
+  capability Capability
+
+  @@id([spaceId, subjectId, capability])
+  @@map("effective_permissions")
+}

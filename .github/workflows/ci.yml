@@ -1,0 +1,195 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  DATARIM_SHA: 0ba3bd641a50f95dae110fa3f1d60d2ae062b723
+
+jobs:
+  fork-policy:
+    name: fork-policy
+    runs-on: [self-hosted, linux, arcana-prod]
+    steps:
+      - name: Reject untrusted fork execution on self-hosted infrastructure
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true
+        run: |
+          echo 'Fork pull requests require a maintainer-owned branch before CI can execute.' >&2
+          exit 1
+      - name: Accept trusted event
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
+        run: echo 'trusted event'
+
+  policy:
+    name: policy-and-manifests
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
+    needs: [fork-policy]
+    runs-on: [self-hosted, linux, arcana-prod]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          repository: Arcanada-one/datarim
+          ref: 0ba3bd641a50f95dae110fa3f1d60d2ae062b723
+          path: .datarim
+          persist-credentials: false
+      - name: Validate public manifests and accepted-risk schema
+        run: |
+          set -euo pipefail
+          for path in SECURITY.md accepted-risk.yml README.md CHANGELOG.md LICENSE auth.dependencies.yaml; do
+            test -f "$path"
+          done
+          for category in tutorials how-to reference explanation; do
+            test -d "docs/$category"
+          done
+          .datarim/dev-tools/check-security-policy.sh --validate-yaml accepted-risk.yml
+      - name: Reject internal task identifiers and private host data
+        run: |
+          set -euo pipefail
+          if git grep -nE '\bWIKI-[0-9]{4}\b'; then exit 1; fi
+          if git grep -nE '100\.(7[0-9]|8[0-9]|9[0-9]|10[0-9]|11[0-9]|12[0-7])\.[0-9]{1,3}\.[0-9]{1,3}'; then exit 1; fi
+
+  secret-scan:
+    name: gitleaks
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
+    needs: [fork-policy]
+    runs-on: [self-hosted, linux, arcana-prod]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      # Free gitleaks CLI via the official Docker image — the gitleaks-action
+      # requires a paid GITLEAKS_LICENSE for org repos (breaking change), which
+      # the ecosystem does not provision. The CLI performs the same scan with no
+      # license gate. Pinned to a released tag; scans full history (checkout
+      # fetch-depth: 0 above). Ecosystem standard: sites/services use the CLI,
+      # never gitleaks-action.
+      - name: gitleaks (CLI, no license)
+        run: |
+          docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 \
+            detect --source=/repo --redact --verbose --no-banner
+
+  quality:
+    name: lint-typecheck-test-build
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
+    needs: [fork-policy]
+    runs-on: [self-hosted, linux, arcana-prod]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.10.0'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --audit-level=high --prod
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: shellcheck -S warning scripts/*.sh
+      - run: systemd-analyze verify deploy/systemd/*.service deploy/systemd/*.timer
+
+  workflow-security:
+    name: actionlint-zizmor
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
+    needs: [fork-policy]
+    runs-on: [self-hosted, linux, arcana-prod]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+      - name: Run checksum-pinned actionlint
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/actionlint.tar.gz"
+          curl -fsSL https://github.com/rhysd/actionlint/releases/download/v1.7.8/actionlint_1.7.8_linux_amd64.tar.gz -o "$archive"
+          echo 'be92c2652ab7b6d08425428797ceabeb16e31a781c07bc388456b4e592f3e36a  '"$archive" | sha256sum --check --strict
+          tar -xzf "$archive" -C "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint" -config-file .github/actionlint.yaml
+      - uses: zizmorcore/zizmor-action@6599ee8b7a49aef6a770f63d261d214911a7ce02 # v0.6.0
+        with:
+          version: 1.27.0
+          online-audits: false
+          persona: auditor
+          min-severity: high
+          advanced-security: false
+          annotations: true
+
+  network-exposure:
+    name: network-exposure
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
+    needs: [fork-policy]
+    runs-on: [self-hosted, linux, arcana-prod]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+      - name: Verify loopback-only application listener
+        run: |
+          set -euo pipefail
+          grep -q "HOST: z.literal('127.0.0.1')" src/config/env.schema.ts
+          ! git grep -nE "listen\([^,]+, *['\"](0\.0\.0\.0|::)['\"]" -- src
+
+  release-candidate:
+    name: signed-release-candidate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [policy, secret-scan, quality, workflow-security, network-exposure]
+    runs-on: [self-hosted, linux, arcana-prod]
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.10.0'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile && pnpm build
+      - name: Build immutable artifact and checksum
+        run: |
+          set -euo pipefail
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 --numeric-owner \
+            -czf "wiki-arcana-${GITHUB_SHA}.tar.gz" dist prisma scripts deploy package.json pnpm-lock.yaml
+          sha256sum "wiki-arcana-${GITHUB_SHA}.tar.gz" > "wiki-arcana-${GITHUB_SHA}.sha256"
+      - uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: wiki-arcana-${{ github.sha }}.cdx.json
+          upload-artifact: false
+      - uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
+      - name: Keyless-sign and verify release candidate
+        run: |
+          set -euo pipefail
+          artifact="wiki-arcana-${GITHUB_SHA}.tar.gz"
+          cosign sign-blob --yes --bundle "${artifact}.sigstore.json" "$artifact"
+          cosign verify-blob --bundle "${artifact}.sigstore.json" \
+            --certificate-identity-regexp "^https://github.com/${GITHUB_REPOSITORY}/.github/workflows/ci.yml@refs/heads/main$" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com "$artifact"
+      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-path: wiki-arcana-${{ github.sha }}.tar.gz
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: wiki-arcana-${{ github.sha }}
+          path: |
+            wiki-arcana-${{ github.sha }}.tar.gz
+            wiki-arcana-${{ github.sha }}.sha256
+            wiki-arcana-${{ github.sha }}.cdx.json
+            wiki-arcana-${{ github.sha }}.tar.gz.sigstore.json
+          if-no-files-found: error
+          retention-days: 14

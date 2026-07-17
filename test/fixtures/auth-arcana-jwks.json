@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "kid": "auth-oidc-signing-ed25519:v1",
+      "use": "sig",
+      "alg": "EdDSA",
+      "x": "2FFLZUqkUGxRLB8oTot4CVYj7os5TecaJ9V4Q-fwUi8"
+    }
+  ]
+}

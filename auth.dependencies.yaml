@@ -1,0 +1,12 @@
+version: 1
+provider: external-oidc
+local_identity_store: false
+token_passthrough: false
+required_claims:
+  - sub
+  - wiki_level
+required_scopes:
+  - wiki.read
+  - wiki.write
+  - wiki.admin
+
