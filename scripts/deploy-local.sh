@@ -17,7 +17,12 @@ pnpm install --frozen-lockfile
 pnpm build
 ln -sfn "$release" "$deploy_root/current.next"
 mv -Tf "$deploy_root/current.next" "$deploy_root/current"
-sudo install -m 0644 deploy/systemd/wiki-arcana.service /etc/systemd/system/wiki-arcana.service
+# The systemd unit is a one-time root bootstrap: the ci-runner has no sudo rights
+# to write /etc/systemd/system (only daemon-reload/restart). Warn loudly if the
+# committed unit drifts from the installed one so an operator re-bootstrap fires.
+if ! diff -q deploy/systemd/wiki-arcana.service /etc/systemd/system/wiki-arcana.service >/dev/null 2>&1; then
+  echo "::warning::wiki-arcana.service differs from the installed unit — operator must re-install /etc/systemd/system/wiki-arcana.service as root before this deploy takes effect" >&2
+fi
 sudo systemctl daemon-reload
 sudo systemctl restart wiki-arcana.service
 curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4110/health >/dev/null
