@@ -10,10 +10,15 @@ StateDirectory=wiki-arcana-monitor
 RuntimeDirectory=wiki-arcana-monitor
 LoadCredential=vault-role-id:/etc/wiki-arcana-monitor/vault-role-id
 LoadCredential=vault-secret-id:/etc/wiki-arcana-monitor/vault-secret-id
+# VAULT_ADDR is a mesh address and MUST NOT be committed to this public repo;
+# it is provisioned at deploy time in the environment file below.
+EnvironmentFile=/etc/wiki-arcana-monitor/environment
 Environment=VAULT_ROLE_ID_FILE=%d/vault-role-id
 Environment=VAULT_SECRET_ID_FILE=%d/vault-secret-id
 Environment=OPSBOT_VAULT_PATH=arcanada/data/prod/wiki-arcana/opsbot
-ExecStart=/usr/bin/bash /srv/apps/wiki-arcana/current/scripts/monitor-wiki.sh
+# The monitor runs on the ecosystem monitoring-agents host, NOT co-located with
+# the API — the script is delivered to a monitor-local path at deploy time.
+ExecStart=/usr/bin/bash /opt/wiki-arcana-monitor/monitor-wiki.sh
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
