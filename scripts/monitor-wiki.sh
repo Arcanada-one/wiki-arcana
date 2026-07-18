@@ -58,7 +58,9 @@ probe_code() {
     else
       printf '000'
     fi
-  elif code="$(curl --silent --show-error --max-time "$timeout_seconds" --output /dev/null --write-out '%{http_code}' "$url")"; then
+  elif code="$(curl --silent --show-error --location --max-time "$timeout_seconds" --output /dev/null --write-out '%{http_code}' "$url")"; then
+    # --location: the site root legitimately 302-redirects to the language prefix
+    # (/ -> /en/); follow it so the probe checks the final page is 200, not the hop.
     printf '%s' "$code"
   else
     printf '000'
