@@ -59,7 +59,13 @@ jobs:
     name: gitleaks
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
     needs: [fork-policy]
-    runs-on: [self-hosted, linux, arcana-prod]
+    # SEC-0028: this is the only job in the repo that needs Docker, and it was
+    # the last thing keeping the arcana-prod runner account in the host `docker`
+    # group — which is root-equivalent on a machine that also carries the
+    # Control Arcana root deploy broker. A secret scan has no reason to run on
+    # the production host at all, so it moves to the general CI pool, which has
+    # Docker for exactly this kind of work.
+    runs-on: [self-hosted, linux, ci-general]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
