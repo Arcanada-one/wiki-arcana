@@ -7,13 +7,17 @@
   "packageManager": "pnpm@10.30.3",
   "scripts": {
     "build": "nest build",
-    "lint": "eslint src test prisma.config.ts vitest.config.ts",
+    "lint": "eslint src test scripts prisma.config.ts prisma.migrate.config.ts vitest.config.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:unit": "vitest run test/unit",
     "test:integration": "vitest run test/integration",
     "prisma:generate": "prisma generate",
-    "migrate:deploy": "scripts/migrate.sh"
+    "migrate:deploy": "scripts/migrate.sh",
+    "storage:prepare": "tsx scripts/benchmark-storage.ts --mode PREPARE",
+    "storage:seed": "tsx scripts/benchmark-storage.ts --mode SEED",
+    "storage:benchmark": "tsx scripts/benchmark-storage.ts --mode AUTHORITATIVE",
+    "storage:verdict": "tsx scripts/verify-storage-benchmark.ts"
   },
   "dependencies": {
     "@fastify/static": "8.3.0",

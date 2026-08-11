@@ -4,6 +4,7 @@ export interface VectorQuery {
   spaceId: string;
   values: readonly number[];
   limit?: number;
+  excludeNodeId?: string;
 }
 
 export interface VectorHit {
@@ -16,4 +17,3 @@ export interface VectorPort {
   search(context: AccessContext, query: VectorQuery): Promise<readonly VectorHit[]>;
   upsert(context: AccessContext, id: string, spaceId: string, values: readonly number[]): Promise<void>;
 }
-

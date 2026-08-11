@@ -36,6 +36,7 @@ const app = await createWikiApplication({
     SCRUTATOR_API_URL: 'https://search.internal.example',
     SCRUTATOR_EMBEDDING_URL: 'https://embedding.internal.example',
     LTM_API_URL: 'https://memory.internal.example',
+    STORAGE_DATABASE_URL: 'postgresql://wiki_runtime:runtime-secret@db.example.internal:5432/wiki',
   },
   tokenVerifier: verifier,
 });

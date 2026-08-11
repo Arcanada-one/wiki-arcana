@@ -1,0 +1,11 @@
+pg_version=18.1
+vector_available=true
+vector_default_version=0.8.2
+vector_installed_version=0.8.1
+age_available=true
+age_default_version=1.7.0
+age_installed_version=1.7.0
+image_digest=sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+free_disk_bytes=17179869184
+bind_available=true
+backup_coverage=verified
