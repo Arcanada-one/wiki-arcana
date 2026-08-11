@@ -9,6 +9,7 @@ import { HealthController } from './health/health.controller.js';
 import { McpController } from './mcp/mcp.controller.js';
 import { McpRateLimiter } from './mcp/mcp-rate-limiter.js';
 import { ProtectedResourceController } from './mcp/protected-resource.controller.js';
+import { StorageModule } from './storage/storage.module.js';
 
 @Module({})
 export class AppModule {
@@ -20,6 +21,7 @@ export class AppModule {
     });
     return {
       module: AppModule,
+      imports: [StorageModule.register(configuration)],
       controllers: [HealthController, WhoamiController, McpController, ProtectedResourceController],
       providers: [
         WikiAuthGuard,

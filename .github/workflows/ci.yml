@@ -103,7 +103,13 @@ jobs:
     name: actionlint-zizmor
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false
     needs: [fork-policy]
-    runs-on: [self-hosted, linux, arcana-prod]
+    # SEC-0028 follow-through: zizmor-action runs its analyzer in a container, so
+    # this job needs Docker. The production runner account was removed from the
+    # host `docker` group precisely so a linter could not reach the socket on the
+    # box that carries the root deploy broker — which left this job failing with
+    # "permission denied ... /var/run/docker.sock" on every run since. Move it to
+    # the general CI pool, exactly as the gitleaks job was moved.
+    runs-on: [self-hosted, linux, ci-general]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:

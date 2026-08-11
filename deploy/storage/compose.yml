@@ -1,0 +1,72 @@
+name: wiki-arcana-storage
+
+x-storage-common: &storage-common
+  image: wiki-arcana-storage:${WIKI_STORAGE_IMAGE_TAG:-local}
+  build:
+    context: ../..
+    dockerfile: deploy/storage/Dockerfile
+  environment:
+    POSTGRES_DB: ${WIKI_STORAGE_DATABASE:-wiki_arcana}
+    POSTGRES_USER: ${WIKI_STORAGE_USER:-wiki_app}
+    POSTGRES_PASSWORD_FILE: /run/secrets/storage_db_password
+  secrets:
+    - storage_db_password
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+    start_period: 20s
+  init: true
+  restart: unless-stopped
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  # The upstream entrypoint starts as root only long enough to read the
+  # root-owned Docker secret and repair a fresh volume, then execs postgres as
+  # UID 999. Keep only the capabilities that bootstrap path requires.
+  cap_add:
+    - CHOWN
+    - DAC_OVERRIDE
+    - FOWNER
+    - SETGID
+    - SETUID
+
+services:
+  storage:
+    <<: *storage-common
+    container_name: wiki-arcana-storage
+    ports:
+      # Bind the storage port to a single private mesh address supplied by the
+      # operator environment (never 0.0.0.0 — see test/unit/storage-packaging.spec.ts).
+      - "${STORAGE_BIND_HOST:?STORAGE_BIND_HOST must be set to the private mesh address}:5433:5432"
+    volumes:
+      - storage_data:/var/lib/postgresql
+
+  # Invoke explicitly with:
+  # docker compose --profile benchmark up storage-benchmark
+  # The explicit service target avoids starting `storage` alongside this
+  # isolated loopback-only database, while mem_limit enforces the 8 GiB ceiling.
+  storage-benchmark:
+    <<: *storage-common
+    container_name: wiki-arcana-storage-benchmark
+    profiles: ["benchmark"]
+    ports:
+      - "127.0.0.1:55433:5432"
+    volumes:
+      - storage_benchmark_data:/var/lib/postgresql
+    mem_limit: 8g
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+    restart: "no"
+
+secrets:
+  storage_db_password:
+    file: ${WIKI_STORAGE_PASSWORD_FILE:-.storage-password}
+
+volumes:
+  storage_data:
+  storage_benchmark_data:

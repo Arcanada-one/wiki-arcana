@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AppConfigSchema } from '../../src/config/env.schema.js';
+import { AppConfigSchema, StorageAdminConfigSchema } from '../../src/config/env.schema.js';
 
 const validEnvironment = {
   AUTH_ISSUER_URL: 'https://auth.arcanada.one',
@@ -8,6 +8,7 @@ const validEnvironment = {
   SCRUTATOR_API_URL: 'https://search.internal.example',
   SCRUTATOR_EMBEDDING_URL: 'https://embedding.internal.example',
   LTM_API_URL: 'https://memory.internal.example',
+  STORAGE_DATABASE_URL: 'postgresql://wiki_runtime:runtime-secret@db.example.internal:5432/wiki',
 };
 
 describe('application configuration', () => {
@@ -37,5 +38,40 @@ describe('application configuration', () => {
       ...validEnvironment,
       AUTH_JWKS_URL: 'https://attacker.invalid/jwks',
     })).toThrow();
+  });
+
+  it('keeps the offline admin URL outside the runtime configuration object', () => {
+    const config = AppConfigSchema.parse({
+      ...validEnvironment,
+      STORAGE_ADMIN_DATABASE_URL: 'postgresql://wiki_admin:admin-secret@db.example.internal:5432/wiki',
+    });
+    expect(config).not.toHaveProperty('STORAGE_ADMIN_DATABASE_URL');
+    expect(() => AppConfigSchema.parse({
+      ...validEnvironment,
+      STORAGE_DATABASE_URL: 'https://db.example.internal/wiki',
+    })).toThrow();
+  });
+
+  it('requires separate canonically decoded roles in offline migration configuration', () => {
+    const runtime = validEnvironment.STORAGE_DATABASE_URL;
+    expect(() => StorageAdminConfigSchema.parse({
+      STORAGE_DATABASE_URL: runtime,
+      STORAGE_ADMIN_DATABASE_URL: runtime,
+    })).toThrow();
+    expect(() => StorageAdminConfigSchema.parse({
+      STORAGE_DATABASE_URL: 'postgresql://wiki%5Fruntime:runtime-secret@db.example.internal:5432/wiki',
+      STORAGE_ADMIN_DATABASE_URL: 'postgresql://wiki_runtime:admin-secret@db.example.internal:5432/wiki',
+    })).toThrow();
+    expect(StorageAdminConfigSchema.safeParse({
+      STORAGE_DATABASE_URL: 'not a URL',
+      STORAGE_ADMIN_DATABASE_URL: 'also not a URL',
+    }).success).toBe(false);
+  });
+
+  it('validates storage pool and timeout bounds', () => {
+    expect(() => AppConfigSchema.parse({ ...validEnvironment, STORAGE_POOL_MAX: 0 })).toThrow();
+    expect(() => AppConfigSchema.parse({ ...validEnvironment, STORAGE_CONNECTION_TIMEOUT_MS: 99 })).toThrow();
+    expect(() => AppConfigSchema.parse({ ...validEnvironment, STORAGE_IDLE_TIMEOUT_MS: 999 })).toThrow();
+    expect(() => AppConfigSchema.parse({ ...validEnvironment, STORAGE_STATEMENT_TIMEOUT_MS: 99 })).toThrow();
   });
 });
