@@ -72,7 +72,7 @@ describe('storage compose contract', () => {
   it('publishes Postgres only on the allocated Tailscale address with a healthcheck and named volume', () => {
     const compose = readFileSync(composePath, 'utf8');
 
-    expect(compose).toContain('100.97.136.74:5433:5432');
+    expect(compose).toContain('${STORAGE_BIND_HOST:?STORAGE_BIND_HOST must be set to the private mesh address}:5433:5432');
     expect(compose).not.toMatch(/(?:0\.0\.0\.0|\[?::\]?):5433:5432/);
     expect(compose).toContain('pg_isready');
     expect(compose).toMatch(/storage_data:\s*$/m);
@@ -142,7 +142,7 @@ describe('read-only storage compatibility probe', () => {
     const output = execFileSync(probePath, ['--fixture', fixturePath], {
       cwd: root,
       encoding: 'utf8',
-      env: { ...process.env, PATH: process.env.PATH },
+      env: { ...process.env, PATH: process.env.PATH, STORAGE_BIND_HOST: '198.51.100.7' },
     });
     const parsed = JSON.parse(output) as Record<string, unknown>;
 
@@ -179,7 +179,7 @@ describe('read-only storage compatibility probe', () => {
     const result = spawnSync(probePath, ['--fixture', fixture], {
       cwd: root,
       encoding: 'utf8',
-      env: { ...process.env, PATH: process.env.PATH },
+      env: { ...process.env, PATH: process.env.PATH, STORAGE_BIND_HOST: '198.51.100.7' },
     });
 
     expect(result.status).toBe(1);

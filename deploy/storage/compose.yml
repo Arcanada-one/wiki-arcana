@@ -38,7 +38,9 @@ services:
     <<: *storage-common
     container_name: wiki-arcana-storage
     ports:
-      - "100.97.136.74:5433:5432"
+      # Bind the storage port to a single private mesh address supplied by the
+      # operator environment (never 0.0.0.0 — see test/unit/storage-packaging.spec.ts).
+      - "${STORAGE_BIND_HOST:?STORAGE_BIND_HOST must be set to the private mesh address}:5433:5432"
     volumes:
       - storage_data:/var/lib/postgresql
 

@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-readonly bind_host='100.97.136.74'
+readonly bind_host="${STORAGE_BIND_HOST:?STORAGE_BIND_HOST must be set to the private mesh address}"
 readonly bind_port='5433'
 readonly minimum_free_disk_bytes='8589934592'
 

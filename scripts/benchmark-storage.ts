@@ -20,7 +20,7 @@ import type { AccessContext } from '../src/storage/ports/access-context.js';
 import type { VectorHit } from '../src/storage/ports/vector.port.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const DOMAIN_PREFIX = 'WIKI-0002/';
+const DOMAIN_PREFIX = 'wiki-storage/';
 const FLOAT53_DENOMINATOR = 2 ** 53;
 const NODE_COUNTER_BASE = 1_000_000n;
 const EDGE_COUNTER_BASE = 2_000_000n;

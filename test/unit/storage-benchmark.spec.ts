@@ -98,7 +98,7 @@ function sequentialPlans(queryIds: readonly string[]): Record<string, unknown> {
   } }]]));
 }
 
-describe('WIKI-0002 deterministic benchmark generator', () => {
+describe('storage deterministic benchmark generator', () => {
   it('binds every shipped storage migration into the benchmark digest', async () => {
     const paths = [
       join(import.meta.dirname, '../../prisma/migrations/202607200001_storage_engines/migration.sql'),
@@ -200,21 +200,24 @@ describe('WIKI-0002 deterministic benchmark generator', () => {
   });
 
   it('matches golden UUID and float32 vector outputs from the frozen SHA-256 counter expansion', () => {
-    expect(deterministicUuid('ids', 0n)).toBe('d604aa2c-cf84-4910-8d8f-fd56fe548217');
-    expect(deterministicUuid('ids', 1_000_000n)).toBe('903e673d-df4c-4202-82d1-ca658c1e59e2');
+    // Re-frozen when the SHA-256 domain-separation prefix was renamed off the
+    // internal task identifier (see scripts/benchmark-storage.ts DOMAIN_PREFIX).
+    // The generator is unchanged; only the constant it salts with is.
+    expect(deterministicUuid('ids', 0n)).toBe('7266ee8e-9640-4940-a35c-e8b6404444ed');
+    expect(deterministicUuid('ids', 1_000_000n)).toBe('1ab7c066-c365-4440-a433-aacc471b397a');
 
     const vector = generateNormalizedVector(0, 1_024);
     expect(vector.slice(0, 8)).toEqual([
-      -0.0007106090779416263,
-      0.04089118912816048,
-      0.0016626762226223946,
-      0.007235154043883085,
-      0.03527025133371353,
-      0.003956214990466833,
-      0.04730195924639702,
-      -0.03723244369029999,
+      -0.0521264486014843,
+      -0.013868370093405247,
+      0.008772404864430428,
+      -0.03650866448879242,
+      0.016644934192299843,
+      -0.03502268344163895,
+      -0.06358553469181061,
+      0.0548541285097599,
     ]);
-    expect(hashFloat32Vector(vector)).toBe('c0725906d94e5c2eb4a1bd2d43b5f0fe43884281b817ba43da221f47f6575b91');
+    expect(hashFloat32Vector(vector)).toBe('47fcce1281d1d22607717260a3ae5c1e5635511f8de96708c000cd2566eedae7');
   });
 
   it('matches a golden canonical manifest digest independent of object key insertion order', () => {

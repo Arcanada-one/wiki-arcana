@@ -603,7 +603,7 @@ export function renderVerdictMarkdown(verdict: BenchmarkVerdict): string {
     ? 'Prepared only; this is not a benchmark PASS'
     : `Authoritative verdict: ${verdict.status}`;
   const reasons = verdict.reasons.length === 0 ? '- No threshold failures.' : verdict.reasons.map((reason) => `- ${reason}`).join('\n');
-  return `# WIKI-0002 storage benchmark verdict\n\n${heading}\n\n## Bindings\n\n- Manifest: \`${verdict.bindings.manifestSha256}\`\n- Commit: \`${verdict.bindings.commit}\`\n- Image: \`${verdict.bindings.imageDigest}\`\n- Migration: \`${verdict.bindings.migrationHash}\`\n- Container: \`${verdict.bindings.target.containerId}\`\n- Volume: \`${verdict.bindings.target.volume}\`\n- Bind: \`${verdict.bindings.target.bind}\`\n\n## Findings\n\n${reasons}\n`;
+  return `# Wiki Arcana storage benchmark verdict\n\n${heading}\n\n## Bindings\n\n- Manifest: \`${verdict.bindings.manifestSha256}\`\n- Commit: \`${verdict.bindings.commit}\`\n- Image: \`${verdict.bindings.imageDigest}\`\n- Migration: \`${verdict.bindings.migrationHash}\`\n- Container: \`${verdict.bindings.target.containerId}\`\n- Volume: \`${verdict.bindings.target.volume}\`\n- Bind: \`${verdict.bindings.target.bind}\`\n\n## Findings\n\n${reasons}\n`;
 }
 
 interface CliOptions extends ExpectedBindings { evidence: string; raw: string; jsonOut: string; markdownOut: string }

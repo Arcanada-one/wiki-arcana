@@ -128,7 +128,7 @@ function passingEvidence(): AuthoritativeEvidence {
   return evidence;
 }
 
-describe('WIKI-0002 fail-closed benchmark verdict', () => {
+describe('storage fail-closed benchmark verdict', () => {
   it('accepts a complete authoritative fixture exactly on every frozen threshold', () => {
     const verdict = validateBenchmarkEvidence(passingEvidence(), bindings, rawArtifactBytes);
     expect(verdict).toMatchObject({ status: 'PASS', pass: true, reasons: [] });
