@@ -1,4 +1,4 @@
-FROM pgvector/pgvector:pg18@sha256:42e7f6b4e1eceb02ff14e3e6bc6108bbe259abbe83879dc1845d0da1ddeb555d AS age-builder
+FROM pgvector/pgvector:pg18@sha256:691673308c99d2161ba298736f3147f1f22d79de2fb7ec93ae9b4afcab870b62 AS age-builder
 
 USER root
 
@@ -66,7 +66,7 @@ RUN age_commit='806fa2ebdb300b3e76ef30cdba61803babbf2683' \
     && make PG_CONFIG=/usr/bin/pg_config -j"$(nproc)" \
     && make PG_CONFIG=/usr/bin/pg_config DESTDIR=/age-install install
 
-FROM pgvector/pgvector:pg18@sha256:42e7f6b4e1eceb02ff14e3e6bc6108bbe259abbe83879dc1845d0da1ddeb555d AS runtime
+FROM pgvector/pgvector:pg18@sha256:691673308c99d2161ba298736f3147f1f22d79de2fb7ec93ae9b4afcab870b62 AS runtime
 
 LABEL org.opencontainers.image.base.name="pgvector/pgvector:pg18" \
       org.opencontainers.image.base.digest="sha256:42e7f6b4e1eceb02ff14e3e6bc6108bbe259abbe83879dc1845d0da1ddeb555d" \
