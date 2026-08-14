@@ -186,7 +186,7 @@ jobs:
           cosign verify-blob --bundle "${artifact}.sigstore.json" \
             --certificate-identity-regexp "^https://github.com/${GITHUB_REPOSITORY}/.github/workflows/ci.yml@refs/heads/main$" \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com "$artifact"
-      - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: wiki-arcana-${{ github.sha }}.tar.gz
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
