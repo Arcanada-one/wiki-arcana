@@ -55,7 +55,7 @@ jobs:
       - name: Pre-deploy host checks
         uses: Arcanada-one/datarim/.github/actions/preflight-check@0ba3bd641a50f95dae110fa3f1d60d2ae062b723 # 2.57.0 main
         with:
-          target-host: arcana-prod
+          target-host: arcana-prd
           service-name: wiki-arcana
           extra-checks: |
             vault
