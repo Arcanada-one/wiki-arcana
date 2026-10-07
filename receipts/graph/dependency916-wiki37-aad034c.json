@@ -1,0 +1,2968 @@
+{
+ "admission": {
+  "rule": "admitted requires every verdict = verified; failed without exemption ⇒ refused; not_measured without exemption ⇒ paused_safe; exemptions (owner + expiry) are attached by the admitting agent, never by the verifier (DEC-AUP-0008, matrix P1/P4)",
+  "structural_exclusion_rule": "DEC-AUP-0034: an affected entity is NOT verdict-owing when all three hold — the verifier matrix declares neither a mandatory nor a selectable verifier for its node type (so the only verdict it could ever carry states a property of the MATRIX, not of this change), the change set does not contain it, and its bytes are identical at base and head. Each one is listed in structural_exclusions with the content hash at both revisions that proves the byte-identity, and impact_pair.receipt_problems re-derives that proof from Git rather than believing the receipt.",
+  "superseded_self_rule": "DEC-AUP-0035: the entity a receipt can never verify is the PREVIOUS VERSION OF ITSELF. When a receipt is re-issued at the same path for the same work item — the ordinary case after a rebase or a second commit on a card — the copy of it standing in the tree is superseded by construction: this run is the measurement that replaces it, so the only verdict it could carry is I14 `not_measured` about a document that no longer exists at that path once the run finishes. It is excluded with the work item and the output path that identify it, both re-derived from Git by impact_pair.receipt_problems, never asserted.",
+  "verdict": "admitted"
+ },
+ "captured_at_utc": "2026-10-07T05:35:35Z",
+ "change_set": {
+  "base": "d84fb9f421d80640ddac0c4b900b3bdcc56d8df5",
+  "files": [
+   {
+    "kind": "global_config",
+    "path": "package.json",
+    "status": "M"
+   },
+   {
+    "kind": "lockfile",
+    "path": "pnpm-lock.yaml",
+    "status": "M"
+   }
+  ],
+  "head": "aad034c7429fa8e4d2b09e00dd06c36029bce6ec",
+  "mode": "diff"
+ },
+ "decision_ref": "DEC-AUP-0008",
+ "exemptions": [],
+ "graph": {
+  "builder_version": "1.0.5",
+  "built_at_utc": "2026-09-05T00:00:00Z",
+  "graph_digest": "sha256:742a71d6e82b37b043deab4a610b19ae51f27f69eea8fee40c5006971c7d8c25",
+  "path": "/home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-current-graph-work/verifier-out/graph-d84fb9f421d8.json",
+  "source_commit": "d84fb9f421d80640ddac0c4b900b3bdcc56d8df5"
+ },
+ "head_graph": {
+  "builder_version": "1.0.5",
+  "built_at_utc": "2026-09-05T00:00:00Z",
+  "graph_digest": "sha256:20557b81e7f152ea4ef93c8b89ed94142c430f4665334a8ccfb3605529bc7cb1",
+  "path": "/home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-current-graph-work/verifier-out/graph-head-aad034c7429f.json",
+  "source_commit": "aad034c7429fa8e4d2b09e00dd06c36029bce6ec",
+  "staleness": {
+   "checked_at_utc": "2026-10-07T05:35:38Z",
+   "checked_nodes": 99,
+   "method": "manifest.dirty must be false; manifest.source_commit == change_set.head; working tree must be clean (a receipt in diff mode describes committed history only); content_hash of every whole-file node (code_unit, document, receipt; deployable_unit via its package.json) must equal the sha256 of the file bytes at head (git objects); contract/route/data_model hashes are extractor-owned (declaration text) and not recomputed",
+   "mismatched_nodes": [],
+   "verdict": "fresh"
+  }
+ },
+ "host": "arcana-devs",
+ "impact_set": {
+  "deterministic_core": [
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:.github/workflows/ci.yml",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:.github/workflows/ci.yml",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:.github/workflows/deploy.yml",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:.github/workflows/deploy.yml",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:eslint.config.mjs",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:eslint.config.mjs",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:prisma.config.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:prisma.config.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:prisma.migrate.config.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:prisma.migrate.config.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:prisma/schema.prisma",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:prisma/schema.prisma",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:prisma/seed.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:prisma/seed.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/benchmark-storage.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/benchmark-storage.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/ci-resolve-ops-key.sh",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/ci-resolve-ops-key.sh",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/deploy-local.sh",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/deploy-local.sh",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/mcp-smoke.sh",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/mcp-smoke.sh",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/migrate.sh",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/migrate.sh",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/monitor-wiki.sh",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/monitor-wiki.sh",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/run-deferred-storage-command.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/run-deferred-storage-command.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/storage-compatibility-probe.sh",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/storage-compatibility-probe.sh",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:scripts/verify-storage-benchmark.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:scripts/verify-storage-benchmark.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/app.module.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/app.module.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/auth/auth.constants.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/auth/auth.constants.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/auth/oidc-token-verifier.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/auth/oidc-token-verifier.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/auth/whoami.controller.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/auth/whoami.controller.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/auth/wiki-auth.guard.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/auth/wiki-auth.guard.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/bootstrap.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/bootstrap.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/clients/ltm.client.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/clients/ltm.client.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/clients/resilient-service-client.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/clients/resilient-service-client.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/clients/scrutator.client.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/clients/scrutator.client.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/config/config.constants.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/config/config.constants.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/config/configuration.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/config/configuration.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/config/env.schema.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/config/env.schema.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/health/health.controller.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/health/health.controller.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/main.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/main.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/mcp/mcp-rate-limiter.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/mcp/mcp-rate-limiter.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/mcp/mcp-server.factory.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/mcp/mcp-server.factory.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/mcp/mcp.controller.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/mcp/mcp.controller.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/mcp/protected-resource.controller.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/mcp/protected-resource.controller.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/rbac/rbac.service.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/rbac/rbac.service.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/access-context.policy.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/access-context.policy.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/age/age-graph.adapter.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/age/age-graph.adapter.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/age/agtype.decoder.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/age/agtype.decoder.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/memory/memory-graph.adapter.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/memory/memory-graph.adapter.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/pgvector/pgvector-vector.adapter.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/pgvector/pgvector-vector.adapter.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/postgres/postgres-registry.adapter.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/postgres/postgres-registry.adapter.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/postgres/postgres-session.options.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/postgres/postgres-session.options.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/postgres/postgres-unit-of-work.adapter.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/postgres/postgres-unit-of-work.adapter.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/postgres/query-executor.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/postgres/query-executor.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/postgres/recursive-cte-graph.adapter.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/postgres/recursive-cte-graph.adapter.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/adapters/postgres/storage-acl.sql.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/adapters/postgres/storage-acl.sql.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/not-implemented-in-phase-one.error.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/not-implemented-in-phase-one.error.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/ports/access-context.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/ports/access-context.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/ports/graph.port.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/ports/graph.port.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/ports/space-registry.port.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/ports/space-registry.port.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/ports/unit-of-work.port.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/ports/unit-of-work.port.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/ports/vector.port.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/ports/vector.port.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/storage-input.validation.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/storage-input.validation.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/storage.errors.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/storage.errors.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/storage.module.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/storage.module.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:src/storage/storage.tokens.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:src/storage/storage.tokens.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/fixtures/monitor_server.py",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/fixtures/monitor_server.py",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/integration/http-auth.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/integration/http-auth.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/integration/mcp-http.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/integration/mcp-http.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/integration/registry-postgres.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/integration/registry-postgres.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/integration/storage-adapters.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/integration/storage-adapters.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/integration/storage-transaction.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/integration/storage-transaction.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/monitor/monitor-wiki.bats",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/monitor/monitor-wiki.bats",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/process/fixture-server.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/process/fixture-server.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/access-context-policy.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/access-context-policy.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/agtype-decoder.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/agtype-decoder.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/baseline.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/baseline.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/configuration.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/configuration.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/mcp-authorization.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/mcp-authorization.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/mcp-rate-limiter.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/mcp-rate-limiter.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/migration-command.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/migration-command.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/migration-policy.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/migration-policy.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/oidc-verifier.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/oidc-verifier.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/public-manifest.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/public-manifest.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/query-executor.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/query-executor.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/rbac.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/rbac.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/service-clients.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/service-clients.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/storage-benchmark-verdict.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/storage-benchmark-verdict.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/storage-benchmark.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/storage-benchmark.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/storage-contracts.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/storage-contracts.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/storage-engine-adapters.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/storage-engine-adapters.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/storage-module.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/storage-module.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:test/unit/storage-packaging.spec.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:test/unit/storage-packaging.spec.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "code_unit:vitest.config.ts",
+    "node_type": "code_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "code_unit:vitest.config.ts",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:DATABASE_URL",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:DATABASE_URL",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:MONITOR_FIXTURE_CONFIG",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:MONITOR_FIXTURE_CONFIG",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:MONITOR_FIXTURE_EVENTS",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:MONITOR_FIXTURE_EVENTS",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:MONITOR_FIXTURE_PORT",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:MONITOR_FIXTURE_PORT",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:PATH",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:PATH",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:TEST_STORAGE_ADMIN_DATABASE_URL",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:TEST_STORAGE_ADMIN_DATABASE_URL",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:TEST_STORAGE_DATABASE_URL",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:TEST_STORAGE_DATABASE_URL",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:WIKI_FIXTURE_PORT",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:WIKI_FIXTURE_PORT",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "config_key:WIKI_FIXTURE_TOKEN_FILE",
+    "node_type": "config_key",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "config_key:WIKI_FIXTURE_TOKEN_FILE",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/auth/oidc-token-verifier.ts#WikiScope",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/auth/oidc-token-verifier.ts#WikiScope",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/clients/ltm.client.ts#LtmHealthSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/clients/ltm.client.ts#LtmHealthSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/clients/scrutator.client.ts#EmbeddingHealthSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/clients/scrutator.client.ts#EmbeddingHealthSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/clients/scrutator.client.ts#ScrutatorHealthSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/clients/scrutator.client.ts#ScrutatorHealthSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/config/env.schema.ts#AppConfigSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/config/env.schema.ts#AppConfigSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/config/env.schema.ts#PostgreSqlUrlSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/config/env.schema.ts#PostgreSqlUrlSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/config/env.schema.ts#ServiceUrlSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/config/env.schema.ts#ServiceUrlSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/config/env.schema.ts#StorageAdminConfigSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/config/env.schema.ts#StorageAdminConfigSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/access-context.policy.ts#AccessContextSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/access-context.policy.ts#AccessContextSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/access-context.policy.ts#CapabilitySchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/access-context.policy.ts#CapabilitySchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/access-context.policy.ts#SpaceGrantRefSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/access-context.policy.ts#SpaceGrantRefSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/ports/access-context.ts#Capability",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/ports/access-context.ts#Capability",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/storage-input.validation.ts#TraversalSpecSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/storage-input.validation.ts#TraversalSpecSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/storage-input.validation.ts#UuidSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/storage-input.validation.ts#UuidSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/storage-input.validation.ts#VectorQuerySchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/storage-input.validation.ts#VectorQuerySchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/storage-input.validation.ts#VectorUpsertSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/storage-input.validation.ts#VectorUpsertSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "contract:src/storage/storage-input.validation.ts#VectorValuesSchema",
+    "node_type": "contract",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "contract:src/storage/storage-input.validation.ts#VectorValuesSchema",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:AccessLevel",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:AccessLevel",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:Capability",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:Capability",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:EffectivePermission",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:EffectivePermission",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:GrantEffect",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:GrantEffect",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:IsolationMode",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:IsolationMode",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:KnowledgeSpace",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:KnowledgeSpace",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:SpaceClosure",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:SpaceClosure",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:SpaceGrant",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:SpaceGrant",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "data_model:SubjectType",
+    "node_type": "data_model",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "data_model:SubjectType",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "deployable_unit:.",
+    "node_type": "deployable_unit",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "deployable_unit:.",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:CHANGELOG.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:CHANGELOG.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:CODE_OF_CONDUCT.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:CODE_OF_CONDUCT.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:CONTRIBUTING.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:CONTRIBUTING.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:README.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:README.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:SECURITY.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:SECURITY.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/explanation/README.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/explanation/README.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/explanation/architecture.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/explanation/architecture.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/explanation/storage-phase-boundary.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/explanation/storage-phase-boundary.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/how-to/README.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/how-to/README.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/reference/README.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/reference/README.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/reference/api.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/reference/api.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/reference/configuration.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/reference/configuration.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/reference/rbac-levels.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/reference/rbac-levels.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "document:docs/tutorials/README.md",
+    "node_type": "document",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "document:docs/tutorials/README.md",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "route:GET /.well-known/oauth-protected-resource",
+    "node_type": "route",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "route:GET /.well-known/oauth-protected-resource",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "route:GET /health",
+    "node_type": "route",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "route:GET /health",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "route:GET /v1/whoami",
+    "node_type": "route",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "route:GET /v1/whoami",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "route:GET /version",
+    "node_type": "route",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "route:GET /version",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   },
+   {
+    "boundary": "intra_unit",
+    "depth": 0,
+    "entity": "route:POST /mcp",
+    "node_type": "route",
+    "path": [
+     {
+      "edge_type": "deploys_to",
+      "from": "code_unit:package.json",
+      "provenance": "deterministic",
+      "to": "route:POST /mcp",
+      "via": "global-fallback"
+     }
+    ],
+    "revisions": [
+     "base",
+     "head"
+    ],
+    "verifier_hint": "can-i-deploy gate (GRAPH-008)"
+   }
+  ],
+  "edge_types": "all",
+  "global_fallback": {
+   "files": [
+    "package.json",
+    "pnpm-lock.yaml"
+   ],
+   "reason": "package.json, pnpm-lock.yaml changed ⇒ every node affected (lockfile / global config / env schema: safe fallback, Bazel/Nx practice)",
+   "triggered": true
+  },
+  "inferred_tail": [],
+  "max_depth": 3,
+  "method": "Union of independently revision-bound base/head traversals; global fallback: every node of the graph is affected (depth 0, synthetic containment hop); reverse traversal (dependents) + forward declared-by hops (provides_route, implements_contract, maps_model of the same file, deploys_to); best path = fewest inferred/observed hops, then shortest; max_depth 3",
+  "total": 139
+ },
+ "notes": [
+  "DRAFT produced by `arcana verify` (tools/graph/verify.py 1.4.1) from matrix contracts/graph-verified-change/verifier-matrix.v1.json; selection rule: required(entity) = ⋃ edge_types[t].mandatory over the edge types t of the hops that reach the entity in its best path (i…",
+  "profile: /home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/WIKI-EXPLICIT-VERIFY-PROFILE.json; baseline: (auto-base-freeze: pre-existing findings at base frozen for this run; persist one with --freeze-baseline) (valid); selected: none; disabled: none"
+ ],
+ "producer": {
+  "tool": "tools/graph/verify.py",
+  "version": "1.4.1"
+ },
+ "receipt_id": "car-verify-20261007T053535Z-aad034c7",
+ "repo": {
+  "name": "Arcanada-one/wiki-arcana",
+  "path": "/home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-source"
+ },
+ "revision_selection": {
+  "base": [
+   "deployable_unit:."
+  ],
+  "head": [
+   "deployable_unit:."
+  ],
+  "schema": "RevisionImpactSelection/v1",
+  "unmeasured_head_files": []
+ },
+ "schema": "ChangeAdmissionReceipt/v1",
+ "staleness": {
+  "checked_at_utc": "2026-10-07T05:35:38Z",
+  "method": "manifest.dirty must be false; manifest.source_commit == change_set.base; working tree must be clean (a receipt in diff mode describes committed history only); content_hash of every whole-file node (code_unit, document, receipt; deployable_unit via its package.json) must equal the sha256 of the file bytes at base (git objects); contract/route/data_model hashes are extractor-owned (declaration text) and not recomputed",
+  "mismatched_nodes": [],
+  "verdict": "fresh"
+ },
+ "structural_exclusions": [],
+ "tree": {
+  "commit": "aad034c7429fa8e4d2b09e00dd06c36029bce6ec",
+  "dirty": false
+ },
+ "verdicts": [
+  {
+   "entity": "deployable_unit:.",
+   "reason": "v-type-check-tsconfig: tsconfig.json: 0 errors; v-fitness: no new violation in .; v-global-fallback-test-root: complete fallback suite: verified",
+   "verdict": "verified",
+   "verifier_ids": [
+    "v-fitness",
+    "v-global-fallback-test-root",
+    "v-type-check-tsconfig"
+   ]
+  }
+ ],
+ "verifier_selection": {
+  "applied": {},
+  "not_applied": [],
+  "requested": [],
+  "schema": "VerifierSelection/v1"
+ },
+ "verifiers": [
+  {
+   "command": "/home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-source/node_modules/.bin/tsc -p /home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-source/tsconfig.json --noEmit --incremental true --tsBuildInfoFile /home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-current-graph-work/verifier-out/type-check-0b7g062s/check.tsbuildinfo --listFiles",
+   "duration_s": 7.99,
+   "entities": [
+    "deployable_unit:."
+   ],
+   "entity_verdicts": {
+    "deployable_unit:.": "verified"
+   },
+   "exit_code": 0,
+   "id": "v-type-check-tsconfig",
+   "kind": "type_check",
+   "output_ref": "/home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-current-graph-work/verifier-out/v-type-check-tsconfig.txt",
+   "started_at_utc": "2026-10-07T05:35:39Z",
+   "summary": "tsconfig.json: exit 0, 0 error(s), 1077 files listed"
+  },
+  {
+   "command": "verify.py fitness_rules FR-01..FR-05 over the head graph + head sources",
+   "duration_s": 0.03,
+   "entities": [
+    "deployable_unit:."
+   ],
+   "entity_verdicts": {
+    "deployable_unit:.": "verified"
+   },
+   "exit_code": 0,
+   "id": "v-fitness",
+   "kind": "fitness_rules",
+   "output_ref": "/home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-current-graph-work/verifier-out/v-fitness.json",
+   "started_at_utc": "2026-10-07T05:35:47Z",
+   "summary": "0 finding(s): 0 new / 0 frozen; 0 entity(ies) failed"
+  },
+  {
+   "command": "pnpm test",
+   "duration_s": 22.1,
+   "entities": [
+    "deployable_unit:."
+   ],
+   "entity_verdicts": {
+    "deployable_unit:.": "verified"
+   },
+   "exit_code": 0,
+   "id": "v-global-fallback-test-root",
+   "kind": "targeted_test",
+   "output_ref": "/home/dev/aup/security-dependencies-916e-C18-source-20261006/org-source-map-20261007/root0522/wiki-current-graph-work/verifier-out/v-global-fallback-test-root.txt",
+   "scope": "global_fallback_full_suite",
+   "started_at_utc": "2026-10-07T05:35:47Z",
+   "summary": "complete fallback suite: verified",
+   "timeout_seconds": 600
+  }
+ ],
+ "verify": {
+  "events": [],
+  "required_by_entity": {
+   "deployable_unit:.": [
+    "fitness_rules",
+    "full_fallback_test",
+    "type_check"
+   ]
+  },
+  "seconds": {
+   "prepare": 0.62,
+   "total": 34.48,
+   "verifiers": 30.12
+  }
+ },
+ "work_item": "85e897b4-b0ed-4e64-acee-014970f1322b"
+}
