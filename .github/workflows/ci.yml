@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 env:
-  DATARIM_SHA: 0ba3bd641a50f95dae110fa3f1d60d2ae062b723
+  DATARIM_SHA: 50351e0468f57a39b280d75cf41827329d6393d2
 
 # A newer push to a pull-request branch supersedes that branch's older run, which
 # otherwise keeps queueing on the shared self-hosted runners. Only pull_request
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
           repository: Arcanada-one/datarim
-          ref: 0ba3bd641a50f95dae110fa3f1d60d2ae062b723
+          ref: 50351e0468f57a39b280d75cf41827329d6393d2
           path: .datarim
           persist-credentials: false
       - name: Validate public manifests and accepted-risk schema
