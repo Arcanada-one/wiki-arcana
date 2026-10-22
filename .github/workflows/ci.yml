@@ -131,7 +131,7 @@ jobs:
           echo 'be92c2652ab7b6d08425428797ceabeb16e31a781c07bc388456b4e592f3e36a  '"$archive" | sha256sum --check --strict
           tar -xzf "$archive" -C "$RUNNER_TEMP" actionlint
           "$RUNNER_TEMP/actionlint" -config-file .github/actionlint.yaml
-      - uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
+      - uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
         with:
           version: 1.27.0
           online-audits: false
