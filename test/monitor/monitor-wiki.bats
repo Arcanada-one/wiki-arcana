@@ -95,7 +95,9 @@ write_config() {
 }
 
 @test "systemd units declare five-minute cadence and hardened state" {
-  grep -q '^OnUnitActiveSec=5min$' "$BATS_TEST_DIRNAME/../../deploy/systemd/wiki-arcana-monitor.timer"
+  grep -q '^OnCalendar=\*:0/5$' "$BATS_TEST_DIRNAME/../../deploy/systemd/wiki-arcana-monitor.timer"
+  # a monotonic-only timer stays elapsed after a reboot and is never re-armed (arcana-prd, Muneral fd0e1fe2)
+  ! grep -q -E '^(OnBootSec|OnUnitActiveSec|OnUnitInactiveSec)=' "$BATS_TEST_DIRNAME/../../deploy/systemd/wiki-arcana-monitor.timer"
   grep -q '^StateDirectory=wiki-arcana-monitor$' "$BATS_TEST_DIRNAME/../../deploy/systemd/wiki-arcana-monitor.service"
   grep -q '^NoNewPrivileges=true$' "$BATS_TEST_DIRNAME/../../deploy/systemd/wiki-arcana-monitor.service"
   grep -q '^ExecStart=/usr/bin/bash .*monitor-wiki.sh$' "$BATS_TEST_DIRNAME/../../deploy/systemd/wiki-arcana-monitor.service"
