@@ -2,8 +2,8 @@
 Description=Run Wiki Arcana external health monitor every five minutes
 
 [Timer]
-OnBootSec=2min
-OnUnitActiveSec=5min
+# Wall-clock schedule: a boot-relative timer can stay `elapsed` with no next run after a reboot (arcana-prd, 2026-11-10).
+OnCalendar=*:0/5
 AccuracySec=30s
 Persistent=true
 Unit=wiki-arcana-monitor.service
