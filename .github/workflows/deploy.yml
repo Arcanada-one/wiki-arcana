@@ -53,7 +53,7 @@ jobs:
           echo "::add-mask::$key"
           echo "OPSBOT_KEY=$key" >> "$GITHUB_ENV"
       - name: Pre-deploy host checks
-        uses: Arcanada-one/datarim/.github/actions/preflight-check@e3136b1b6d245c29805cc7ef1555fcbc1e3c92ff  # v4.12.6
+        uses: Arcanada-one/datarim/.github/actions/preflight-check@b61925dd75a302d0a5a344f01fd6df42e461a954  # v4.12.8
         with:
           target-host: arcana-prd
           service-name: wiki-arcana
