@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
           repository: Arcanada-one/datarim
-          ref: 50351e0468f57a39b280d75cf41827329d6393d2
+          ref: 9709598f710c3d0c2d8af8958d39020de37b26c0
           path: .datarim
           persist-credentials: false
       - name: Validate public manifests and accepted-risk schema
