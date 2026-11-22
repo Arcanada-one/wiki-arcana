@@ -63,8 +63,9 @@ jobs:
         with:
           target-host: arcana-prd
           service-name: wiki-arcana
+          # arcana-prd runs no local Vault; AppRole key resolution is separate
+          # and belongs to the Phase-2 deploy-env bootstrap.
           extra-checks: |
-            vault
             tailscale
             time-skew
             docker-pressure
