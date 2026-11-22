@@ -31,17 +31,16 @@ RUN snapshot='20260505T000000Z' \
         ca-certificates \
         curl \
         flex \
-        git \
         libreadline-dev \
         zlib1g-dev \
     && pg_dev_version='18.4-1.pgdg12+1' \
     && pg_dev_sha256='bb45f27f6072e8109b9a67e390ff0139ab493f681ec05d1cfed139b101187c00' \
     && libpq_dev_sha256='f9172951259bc897a10ecefc046074ba3beb3acfda7131d34b29627574c45c40' \
     && curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
-        "https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-18/postgresql-server-dev-18_${pg_dev_version}_amd64.deb" \
+        "https://apt-archive.postgresql.org/pub/repos/apt/pool/main/p/postgresql-18/postgresql-server-dev-18_${pg_dev_version}_amd64.deb" \
         --output /tmp/postgresql-server-dev-18.deb \
     && curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
-        "https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-18/libpq-dev_${pg_dev_version}_amd64.deb" \
+        "https://apt-archive.postgresql.org/pub/repos/apt/pool/main/p/postgresql-18/libpq-dev_${pg_dev_version}_amd64.deb" \
         --output /tmp/libpq-dev.deb \
     && printf '%s  %s\n' \
         "$pg_dev_sha256" /tmp/postgresql-server-dev-18.deb \
@@ -56,15 +55,17 @@ RUN snapshot='20260505T000000Z' \
     && rm -f /tmp/libpq-dev.deb /tmp/postgresql-server-dev-18.deb \
     && rm -rf /var/lib/apt/lists/*
 
-RUN age_commit='806fa2ebdb300b3e76ef30cdba61803babbf2683' \
-    && git init /tmp/age \
-    && git -C /tmp/age remote add origin https://github.com/apache/age.git \
-    && git -C /tmp/age fetch --depth 1 origin "$age_commit" \
-    && git -C /tmp/age checkout --detach FETCH_HEAD \
-    && cd /tmp/age \
-    && test "$(git rev-parse HEAD)" = "$age_commit" \
-    && make PG_CONFIG=/usr/bin/pg_config -j"$(nproc)" \
-    && make PG_CONFIG=/usr/bin/pg_config DESTDIR=/age-install install
+RUN mkdir -p /tmp/age \
+    && age_commit='806fa2ebdb300b3e76ef30cdba61803babbf2683' \
+    && age_sha256='a88e8e4a0594f9aad6d94d2f59b979d649a15480060b25efb8563cdb86853b7f' \
+    && curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
+        "https://codeload.github.com/apache/age/tar.gz/${age_commit}" \
+        --output /tmp/age.tar.gz \
+    && printf '%s  %s\n' "$age_sha256" /tmp/age.tar.gz | sha256sum --check --strict \
+    && tar -xzf /tmp/age.tar.gz --strip-components=1 -C /tmp/age \
+    && make -C /tmp/age PG_CONFIG=/usr/bin/pg_config -j"$(nproc)" \
+    && make -C /tmp/age PG_CONFIG=/usr/bin/pg_config DESTDIR=/age-install install \
+    && rm -f /tmp/age.tar.gz
 
 FROM pgvector/pgvector:pg18@sha256:42e7f6b4e1eceb02ff14e3e6bc6108bbe259abbe83879dc1845d0da1ddeb555d AS runtime
 
