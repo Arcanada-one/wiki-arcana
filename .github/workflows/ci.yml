@@ -113,13 +113,13 @@ jobs:
       - run: systemd-analyze verify deploy/systemd/*.service deploy/systemd/*.timer
 
   migration-rehearsal:
-    name: postgres16-age-pgvector-migration-rehearsal
+    name: production-storage-image-migration-rehearsal
     if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
     needs: [fork-policy]
     runs-on: [self-hosted, linux, ci-general]
     timeout-minutes: 45
     env:
-      PG_IMAGE: wiki-arcana-postgres16:${{ github.run_id }}-${{ github.run_attempt }}
+      PG_IMAGE: wiki-arcana-storage-ci:${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
@@ -132,8 +132,8 @@ jobs:
           node-version: '24.22.1'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Build pinned PostgreSQL 16 test image
-        run: docker build --file tests/postgres/Dockerfile --tag "$PG_IMAGE" .
+      - name: Build production storage image from the deploy Dockerfile
+        run: docker build --file deploy/storage/Dockerfile --tag "$PG_IMAGE" .
       - name: Apply the July baseline then upgrade and run DB-backed suite
         run: scripts/rehearse-migrations.sh
       - name: Remove this run's test image
@@ -193,7 +193,7 @@ jobs:
   release-candidate:
     name: signed-release-candidate
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [policy, secret-scan, quality, workflow-security, network-exposure]
+    needs: [policy, secret-scan, quality, workflow-security, network-exposure, migration-rehearsal]
     runs-on: [self-hosted, linux, arcana-prod]
     permissions:
       contents: read

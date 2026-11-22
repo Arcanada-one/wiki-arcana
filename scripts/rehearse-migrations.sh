@@ -46,7 +46,7 @@ done
 test "$ready" = 1
 
 server_version_num="$(docker exec "$container_id" psql --username "$admin_user" --dbname "$database_name" --no-align --tuples-only --command 'SHOW server_version_num')"
-[[ "$server_version_num" == 16* ]]
+[[ "$server_version_num" == 18* ]]
 printf 'postgres_server_version_num=%s\n' "$server_version_num"
 
 docker exec --interactive "$container_id" psql \
@@ -63,16 +63,28 @@ STORAGE_ADMIN_DATABASE_URL="$admin_url" corepack pnpm exec prisma migrate resolv
   --config prisma.migrate.config.ts \
   --schema prisma/schema.prisma
 
+baseline_counts_match="$(docker exec "$container_id" psql \
+  --username "$admin_user" --dbname "$database_name" --no-align --tuples-only \
+  --command "SELECT (SELECT count(*) = 1 FROM public._prisma_migrations) AND (SELECT count(*) = 1 FROM public.knowledge_spaces) AND (SELECT count(*) = 4 FROM public.access_levels) AND (SELECT count(*) = 1 FROM public.space_closure) AND (SELECT count(*) = 0 FROM public.space_grants) AND (SELECT count(*) = 0 FROM public.effective_permissions)")"
+test "$baseline_counts_match" = t
+printf 'baseline_seed_counts_match=true\n'
+
 STORAGE_DATABASE_URL="$runtime_url" \
 STORAGE_ADMIN_DATABASE_URL="$admin_url" \
   "$root/scripts/migrate.sh"
 
-extensions="$(docker exec "$container_id" psql \
+age_version="$(docker exec "$container_id" psql \
   --username "$admin_user" --dbname "$database_name" --no-align --tuples-only \
-  --command "SELECT extname || '=' || extversion FROM pg_extension WHERE extname IN ('age','vector') ORDER BY extname")"
-printf '%s\n' "$extensions"
-grep -Fx 'age=1.6.0' <<<"$extensions"
-grep -Fx 'vector=0.8.2' <<<"$extensions"
+  --command "SELECT extversion FROM pg_extension WHERE extname = 'age'")"
+vector_version="$(docker exec "$container_id" psql \
+  --username "$admin_user" --dbname "$database_name" --no-align --tuples-only \
+  --command "SELECT extversion FROM pg_extension WHERE extname = 'vector'")"
+test "$age_version" = '1.7.0'
+[[ "$vector_version" =~ ^([0-9]+)\.([0-9]+)\.[0-9]+$ ]]
+vector_major="${BASH_REMATCH[1]}"
+vector_minor="${BASH_REMATCH[2]}"
+(( 10#$vector_major > 0 || (10#$vector_major == 0 && 10#$vector_minor >= 8) ))
+printf 'age=%s vector=%s\n' "$age_version" "$vector_version"
 
 TEST_REGISTRY_DATABASE_URL="$admin_url" \
 TEST_STORAGE_DATABASE_URL="$runtime_url" \

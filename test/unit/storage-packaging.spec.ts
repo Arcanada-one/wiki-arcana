@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 const root = resolve(import.meta.dirname, '../..');
 const dockerfilePath = resolve(root, 'deploy/storage/Dockerfile');
 const composePath = resolve(root, 'deploy/storage/compose.yml');
+const ciWorkflowPath = resolve(root, '.github/workflows/ci.yml');
 const probePath = resolve(root, 'scripts/storage-compatibility-probe.sh');
 const fixturePath = resolve(root, 'test/fixtures/storage-compatibility-probe.txt');
 const unavailableFixturePath = resolve(root, 'test/fixtures/storage-compatibility-uninstalled.txt');
@@ -17,6 +18,14 @@ const debianSnapshot = '20260505T000000Z';
 const postgresServerDevVersion = '18.4-1.pgdg12+1';
 
 describe('storage image packaging contract', () => {
+  it('rehearses migrations with the production storage image definition', () => {
+    const workflow = readFileSync(ciWorkflowPath, 'utf8');
+    const compose = readFileSync(composePath, 'utf8');
+
+    expect(workflow).toContain('docker build --file deploy/storage/Dockerfile --tag "$PG_IMAGE" .');
+    expect(compose).toContain('dockerfile: deploy/storage/Dockerfile');
+  });
+
   it('pins and verifies AGE while keeping the runtime on the exact pgvector digest', () => {
     const dockerfile = readFileSync(dockerfilePath, 'utf8');
 
