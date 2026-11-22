@@ -1,5 +1,6 @@
 self-hosted-runner:
   labels:
     - arcana-prod
+    - arcana-prd-host
     - ci-general
     - docker

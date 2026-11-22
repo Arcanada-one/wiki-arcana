@@ -12,7 +12,7 @@ const configuration = AppConfigSchema.parse({
   SCRUTATOR_API_URL: 'https://search.example.com',
   SCRUTATOR_EMBEDDING_URL: 'https://embedding.example.com',
   LTM_API_URL: 'https://memory.example.com',
-  STORAGE_DATABASE_URL: 'postgresql://wiki_runtime:runtime-secret@db.example.com:5432/wiki',
+  STORAGE_DATABASE_URL: 'postgresql://wiki_arcana_runtime:runtime-secret@db.example.com:5432/wiki',
 });
 
 describe('StorageModule', () => {

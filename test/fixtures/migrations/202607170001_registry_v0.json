@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "source_commit": "395214a0447902ea9d5309e982c88cd69f9035e1",
+  "source_path": "prisma/migrations/202607170001_registry_v0/migration.sql",
+  "fixture_path": "test/fixtures/migrations/202607170001_registry_v0.sql",
+  "sha256": "58d1e42373c43b38477ce40ca49fbab5dee4e2e8c62f9011082e7a7646526b9d"
+}

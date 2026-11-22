@@ -8,7 +8,7 @@ const validEnvironment = {
   SCRUTATOR_API_URL: 'https://search.internal.example',
   SCRUTATOR_EMBEDDING_URL: 'https://embedding.internal.example',
   LTM_API_URL: 'https://memory.internal.example',
-  STORAGE_DATABASE_URL: 'postgresql://wiki_runtime:runtime-secret@db.example.internal:5432/wiki',
+  STORAGE_DATABASE_URL: 'postgresql://wiki_arcana_runtime:runtime-secret@db.example.internal:5432/wiki',
 };
 
 describe('application configuration', () => {
@@ -16,6 +16,12 @@ describe('application configuration', () => {
     const config = AppConfigSchema.parse(validEnvironment);
     expect(config.HOST).toBe('127.0.0.1');
     expect(config.AUTH_AUDIENCE).toBe('https://api.arcanada.wiki');
+  });
+
+  it('requires a storage database URL before application startup', () => {
+    const environment = { ...validEnvironment };
+    Reflect.deleteProperty(environment, 'STORAGE_DATABASE_URL');
+    expect(AppConfigSchema.safeParse(environment).success).toBe(false);
   });
 
   it.each(['AUTH_ISSUER_URL', 'AUTH_AUDIENCE', 'AUTH_JWKS_URL'] as const)(
@@ -43,7 +49,7 @@ describe('application configuration', () => {
   it('keeps the offline admin URL outside the runtime configuration object', () => {
     const config = AppConfigSchema.parse({
       ...validEnvironment,
-      STORAGE_ADMIN_DATABASE_URL: 'postgresql://wiki_admin:admin-secret@db.example.internal:5432/wiki',
+      STORAGE_ADMIN_DATABASE_URL: 'postgresql://wiki_arcana_admin:admin-secret@db.example.internal:5432/wiki',
     });
     expect(config).not.toHaveProperty('STORAGE_ADMIN_DATABASE_URL');
     expect(() => AppConfigSchema.parse({
@@ -59,8 +65,8 @@ describe('application configuration', () => {
       STORAGE_ADMIN_DATABASE_URL: runtime,
     })).toThrow();
     expect(() => StorageAdminConfigSchema.parse({
-      STORAGE_DATABASE_URL: 'postgresql://wiki%5Fruntime:runtime-secret@db.example.internal:5432/wiki',
-      STORAGE_ADMIN_DATABASE_URL: 'postgresql://wiki_runtime:admin-secret@db.example.internal:5432/wiki',
+      STORAGE_DATABASE_URL: 'postgresql://wiki%5Farcana_runtime:runtime-secret@db.example.internal:5432/wiki',
+      STORAGE_ADMIN_DATABASE_URL: 'postgresql://wiki_arcana_runtime:admin-secret@db.example.internal:5432/wiki',
     })).toThrow();
     expect(StorageAdminConfigSchema.safeParse({
       STORAGE_DATABASE_URL: 'not a URL',

@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 const root = resolve(import.meta.dirname, '../..');
 const dockerfilePath = resolve(root, 'deploy/storage/Dockerfile');
 const composePath = resolve(root, 'deploy/storage/compose.yml');
+const ciWorkflowPath = resolve(root, '.github/workflows/ci.yml');
 const probePath = resolve(root, 'scripts/storage-compatibility-probe.sh');
 const fixturePath = resolve(root, 'test/fixtures/storage-compatibility-probe.txt');
 const unavailableFixturePath = resolve(root, 'test/fixtures/storage-compatibility-uninstalled.txt');
@@ -13,17 +14,29 @@ const unsupportedFixturePath = resolve(root, 'test/fixtures/storage-compatibilit
 
 const baseImage = 'pgvector/pgvector:pg18@sha256:42e7f6b4e1eceb02ff14e3e6bc6108bbe259abbe83879dc1845d0da1ddeb555d';
 const ageCommit = '806fa2ebdb300b3e76ef30cdba61803babbf2683';
+const ageArchiveSha256 = 'a88e8e4a0594f9aad6d94d2f59b979d649a15480060b25efb8563cdb86853b7f';
 const debianSnapshot = '20260505T000000Z';
 const postgresServerDevVersion = '18.4-1.pgdg12+1';
 
 describe('storage image packaging contract', () => {
+  it('rehearses migrations with the production storage image definition', () => {
+    const workflow = readFileSync(ciWorkflowPath, 'utf8');
+    const compose = readFileSync(composePath, 'utf8');
+
+    expect(workflow).toContain('docker build --file deploy/storage/Dockerfile --tag "$PG_IMAGE" .');
+    expect(compose).toContain('dockerfile: deploy/storage/Dockerfile');
+  });
+
   it('pins and verifies AGE while keeping the runtime on the exact pgvector digest', () => {
     const dockerfile = readFileSync(dockerfilePath, 'utf8');
 
     expect(dockerfile).toContain(`FROM ${baseImage} AS age-builder`);
     expect(dockerfile).toContain(`FROM ${baseImage} AS runtime`);
     expect(dockerfile).toContain(`age_commit='${ageCommit}'`);
-    expect(dockerfile).toMatch(/test "\$\(git rev-parse HEAD\)" = "\$age_commit"/);
+    expect(dockerfile).toContain(`age_sha256='${ageArchiveSha256}'`);
+    expect(dockerfile).toContain('https://codeload.github.com/apache/age/tar.gz/${age_commit}');
+    expect(dockerfile).toContain('printf \'%s  %s\\n\' "$age_sha256" /tmp/age.tar.gz | sha256sum --check --strict');
+    expect(dockerfile).toContain('apt-archive.postgresql.org/pub/repos/apt/pool/main/p/postgresql-18/');
     expect(dockerfile).toContain(`pg_dev_version='${postgresServerDevVersion}'`);
     expect(dockerfile).toContain('PG_CONFIG=/usr/bin/pg_config');
     expect(dockerfile).not.toContain('PG_CONFIG=/usr/local/bin/pg_config');
@@ -40,7 +53,7 @@ describe('storage image packaging contract', () => {
     expect(dockerfile).toContain(
       'f9172951259bc897a10ecefc046074ba3beb3acfda7131d34b29627574c45c40',
     );
-    expect(dockerfile).not.toContain('ARG AGE_COMMIT');
+    expect(dockerfile).not.toContain('apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-18/');
     const runtimeStage = dockerfile.slice(dockerfile.indexOf(`FROM ${baseImage} AS runtime`));
     expect(runtimeStage).not.toContain('USER postgres');
     expect(dockerfile).toContain(`org.apache.age.revision="${ageCommit}"`);
