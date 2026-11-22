@@ -2,7 +2,7 @@ import { Pool } from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { PostgresRegistryAdapter } from '../../src/storage/adapters/postgres/postgres-registry.adapter.js';
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.TEST_REGISTRY_DATABASE_URL;
 const describeDatabase = databaseUrl ? describe : describe.skip;
 const ids = {
   parent: '01981c60-0000-7000-8000-000000000010',

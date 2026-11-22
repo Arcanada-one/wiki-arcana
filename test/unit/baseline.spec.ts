@@ -11,7 +11,7 @@ describe('server baseline', () => {
       SCRUTATOR_API_URL: 'https://search.internal.example',
       SCRUTATOR_EMBEDDING_URL: 'https://embedding.internal.example',
       LTM_API_URL: 'https://memory.internal.example',
-      STORAGE_DATABASE_URL: 'postgresql://wiki_runtime:runtime-secret@db.example.internal:5432/wiki',
+      STORAGE_DATABASE_URL: 'postgresql://wiki_arcana_runtime:runtime-secret@db.example.internal:5432/wiki',
     });
     expect(config.HOST).toBe('127.0.0.1');
     expect(config.PORT).toBe(4110);
@@ -26,7 +26,7 @@ describe('server baseline', () => {
       SCRUTATOR_API_URL: 'https://search.internal.example',
       SCRUTATOR_EMBEDDING_URL: 'https://embedding.internal.example',
       LTM_API_URL: 'https://memory.internal.example',
-      STORAGE_DATABASE_URL: 'postgresql://wiki_runtime:runtime-secret@db.example.internal:5432/wiki',
+      STORAGE_DATABASE_URL: 'postgresql://wiki_arcana_runtime:runtime-secret@db.example.internal:5432/wiki',
     })).toThrow();
   });
 
