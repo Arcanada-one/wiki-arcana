@@ -21,6 +21,12 @@ jobs:
     runs-on:
       group: arcana-prd-host
       labels: [self-hosted, linux, arcana-prod, arcana-prd-host]
+    env:
+      # The preflight's `vault` check shells out to `vault status`, which needs
+      # an address; without one it reports `sealed=unknown` and fails the
+      # deploy. The shared repository variable is also used by legal-arcana
+      # and muneral.
+      VAULT_ADDR: ${{ vars.VAULT_ADDR }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
         with:
@@ -63,9 +69,8 @@ jobs:
         with:
           target-host: arcana-prd
           service-name: wiki-arcana
-          # arcana-prd runs no local Vault; AppRole key resolution is separate
-          # and belongs to the Phase-2 deploy-env bootstrap.
           extra-checks: |
+            vault
             tailscale
             time-skew
             docker-pressure
