@@ -16,14 +16,14 @@ if ! id "$BUILD_USER" >/dev/null 2>&1; then
   useradd --system --gid "$BUILD_USER" --home-dir "/var/lib/$BUILD_USER" --create-home \
     --shell /usr/sbin/nologin "$BUILD_USER"
 fi
-[[ "$(id -gn "$BUILD_USER")" == "$BUILD_USER" ]] || {
-  echo 'build account must use its private primary group' >&2
+[[ "$(id -nG "$BUILD_USER")" == "$BUILD_USER" ]] || {
+  echo 'build account must belong only to its private group' >&2
   exit 1
 }
-if id -nG "$BUILD_USER" | tr ' ' '\n' | grep -Fxq wiki-arcana; then
-  echo 'build account must not belong to the wiki-arcana service group' >&2
+[[ "$(getent passwd "$BUILD_USER" | cut -d: -f7)" == '/usr/sbin/nologin' ]] || {
+  echo 'build account must use /usr/sbin/nologin' >&2
   exit 1
-fi
+}
 
 install -d -o root -g root -m 0755 /var/lib/wiki-arcana-deploy
 install -d -o root -g root -m 0755 /var/lib/wiki-arcana-deploy/build
