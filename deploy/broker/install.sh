@@ -17,8 +17,7 @@ command -v visudo >/dev/null || { echo 'visudo is required' >&2; exit 1; }
 id "$RUNNER_USER" >/dev/null 2>&1 || { echo 'ci-runner-deploy account is required' >&2; exit 1; }
 [[ -f "$ENVIRONMENT_FILE" ]] || { echo 'wiki-arcana environment file is required for access verification' >&2; exit 1; }
 
-if probe_sudo_access "$RUNNER_USER" '/usr/bin/systemctl restart wiki-arcana.service' \
-  /usr/bin/systemctl restart wiki-arcana.service; then
+if probe_sudo_access "$RUNNER_USER" /usr/bin/systemctl restart wiki-arcana.service; then
   echo 'ci-runner-deploy can already restart wiki-arcana directly through sudo' >&2
   exit 1
 else
@@ -76,13 +75,12 @@ for broker_verb in deploy health rollback status; do
       probe_args=("$BROKER_PATH" "$broker_verb")
       ;;
   esac
-  if ! probe_sudo_access "$RUNNER_USER" "$BROKER_PATH $broker_verb" "${probe_args[@]}"; then
+  if ! probe_sudo_access "$RUNNER_USER" "${probe_args[@]}"; then
     echo "ci-runner-deploy broker sudo policy did not allow $broker_verb" >&2
     exit 1
   fi
 done
-if probe_sudo_access "$RUNNER_USER" '/usr/bin/systemctl restart wiki-arcana.service' \
-  /usr/bin/systemctl restart wiki-arcana.service; then
+if probe_sudo_access "$RUNNER_USER" /usr/bin/systemctl restart wiki-arcana.service; then
   echo 'ci-runner-deploy can restart wiki-arcana directly through sudo' >&2
   exit 1
 else
