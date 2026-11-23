@@ -29,6 +29,10 @@ probe_sudo_access() {
   # return exit 1 with no output when that command is denied.
   local runner_user="$1"
   shift
+  if [[ "$#" -eq 0 ]]; then
+    printf 'wiki-arcana installer: sudo access probe requires a command\n' >&2
+    return 2
+  fi
   local expected_command="$*"
   local output
   local probe_status

@@ -67,6 +67,7 @@ describe('wiki-arcana installer access probes', () => {
     });
     expect(runProbe('probe_sudo_access', systemctlCommand, exactDenialPath, denied, 1).status).toBe(1);
     expect(runProbe('probe_sudo_access', systemctlCommand, exactDenialPath, '', 1).status).toBe(1);
+    expect(runProbe('probe_sudo_access', [runner], exactDenialPath, '', 1).status).toBe(2);
     expect(runProbe('probe_sudo_access', systemctlCommand, exactDenialPath, `${denied}\nextra`, 1).status).toBe(2);
     expect(runProbe('probe_sudo_access', systemctlCommand, exactDenialPath, 'sudo: unknown user', 1).status).toBe(2);
 
