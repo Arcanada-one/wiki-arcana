@@ -1,0 +1,215 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+export PATH
+
+SERVICE='wiki-arcana.service'
+BUILD_USER='wiki-arcana-build'
+REPOSITORY_URL='https://github.com/Arcanada-one/wiki-arcana.git'
+CHECKOUT='/var/lib/wiki-arcana-deploy/repo'
+BUILD_ROOT='/var/lib/wiki-arcana-deploy/build'
+DEPLOY_ROOT='/srv/apps/wiki-arcana'
+RELEASES_DIR='/srv/apps/wiki-arcana/releases'
+CURRENT_LINK='/srv/apps/wiki-arcana/current'
+LOCK_FILE='/run/lock/wiki-arcana-deploy.lock'
+
+# A temporary root is available only when the file is sourced by the test suite.
+# Executing the broker always uses the fixed production paths above.
+if [[ "${BASH_SOURCE[0]}" != "$0" && -n "${WIKI_ARCANA_BROKER_TEST_ROOT:-}" ]]; then
+  DEPLOY_ROOT="$WIKI_ARCANA_BROKER_TEST_ROOT/apps/wiki-arcana"
+  RELEASES_DIR="$DEPLOY_ROOT/releases"
+  CURRENT_LINK="$DEPLOY_ROOT/current"
+  BUILD_ROOT="$WIKI_ARCANA_BROKER_TEST_ROOT/var/build"
+  CHECKOUT="$WIKI_ARCANA_BROKER_TEST_ROOT/var/repo"
+  LOCK_FILE="$WIKI_ARCANA_BROKER_TEST_ROOT/lock"
+fi
+readonly SERVICE BUILD_USER REPOSITORY_URL CHECKOUT BUILD_ROOT DEPLOY_ROOT RELEASES_DIR CURRENT_LINK LOCK_FILE
+
+valid_sha() {
+  [[ "${1:-}" =~ ^[[:xdigit:]]{40}$ ]]
+}
+
+normalise_sha() {
+  valid_sha "${1:-}" || { echo 'invalid commit SHA' >&2; return 2; }
+  printf '%s\n' "${1,,}"
+}
+
+validate_arguments() {
+  case "${1:-}" in
+    deploy|rollback)
+      [[ $# -eq 2 ]] && valid_sha "$2"
+      ;;
+    health|status)
+      [[ $# -eq 1 ]]
+      ;;
+    *)
+      return 2
+      ;;
+  esac
+}
+
+health_check() {
+  curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4110/health >/dev/null &&
+    curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4110/version >/dev/null
+}
+
+atomic_current_link() {
+  local target="$1"
+  local next="${CURRENT_LINK}.next"
+  rm -f -- "$next"
+  ln -s -- "$target" "$next"
+  mv -Tf -- "$next" "$CURRENT_LINK"
+}
+
+restart_service() {
+  systemctl restart "$SERVICE"
+}
+
+activate_release() {
+  local target="$1"
+  local previous=''
+  local restart_ok=0
+  if [[ -L "$CURRENT_LINK" ]]; then
+    previous="$(readlink -f -- "$CURRENT_LINK")"
+  fi
+
+  atomic_current_link "$target"
+  if restart_service && health_check; then
+    return 0
+  fi
+
+  echo 'release health check failed; restoring previous release' >&2
+  if [[ -n "$previous" ]]; then
+    atomic_current_link "$previous"
+  else
+    rm -f -- "$CURRENT_LINK"
+  fi
+  restart_service || restart_ok=$?
+  if (( restart_ok != 0 )); then
+    echo 'service restart also failed after restoring previous release' >&2
+  elif ! health_check; then
+    echo 'previous release did not pass health checks after restoration' >&2
+  fi
+  return 1
+}
+
+ensure_checkout() {
+  install -d -o root -g root -m 0755 "$(dirname -- "$CHECKOUT")"
+  if [[ ! -d "$CHECKOUT/.git" ]]; then
+    install -d -o root -g root -m 0755 "$CHECKOUT"
+    git -C "$CHECKOUT" init
+    git -C "$CHECKOUT" remote add origin "$REPOSITORY_URL"
+  fi
+  [[ "$(stat -c '%U:%G' "$CHECKOUT")" == 'root:root' ]] || {
+    echo 'root checkout ownership is invalid' >&2
+    return 1
+  }
+}
+
+fetch_commit() {
+  local sha="$1"
+  ensure_checkout
+  git -C "$CHECKOUT" fetch --no-tags origin '+refs/heads/main:refs/remotes/origin/main'
+  git -C "$CHECKOUT" cat-file -e "${sha}^{commit}" 2>/dev/null || {
+    echo 'requested commit is not present in the fetched main history' >&2
+    return 1
+  }
+  git -C "$CHECKOUT" merge-base --is-ancestor "$sha" refs/remotes/origin/main || {
+    echo 'requested commit is not reachable from main' >&2
+    return 1
+  }
+}
+
+build_release() {
+  local sha="$1"
+  local build_dir="$BUILD_ROOT/$sha"
+  install -d -o root -g root -m 0755 "$BUILD_ROOT"
+  rm -rf -- "$build_dir"
+  install -d -o "$BUILD_USER" -g "$BUILD_USER" -m 0700 "$build_dir" "$build_dir/home" "$build_dir/source"
+  git -C "$CHECKOUT" archive --format=tar "$sha" |
+    runuser -u "$BUILD_USER" -- tar -xf - -C "$build_dir/source"
+  runuser -u "$BUILD_USER" -- env HOME="$build_dir/home" PATH='/usr/local/bin:/usr/bin:/bin' \
+    /bin/bash -c 'set -euo pipefail; cd "$1"; corepack pnpm install --frozen-lockfile; corepack pnpm build' \
+    _ "$build_dir/source"
+
+  local stage="$RELEASES_DIR/.staging-$sha-$$"
+  rm -rf -- "$stage"
+  install -d -o root -g wiki-arcana -m 0750 "$stage"
+  cp -a -- "$build_dir/source/." "$stage/"
+  chown -R root:wiki-arcana "$stage"
+  chmod -R u=rwX,g=rX,o= "$stage"
+  if [[ -e "$RELEASES_DIR/$sha" ]]; then
+    if [[ "$(readlink -f -- "$CURRENT_LINK" 2>/dev/null || true)" == "$RELEASES_DIR/$sha" ]]; then
+      echo 'requested release is already current; refusing to replace it in place' >&2
+      rm -rf -- "$stage"
+      return 1
+    fi
+    rm -rf -- "${RELEASES_DIR:?}/$sha"
+  fi
+  mv -- "$stage" "$RELEASES_DIR/$sha"
+  rm -rf -- "$build_dir"
+}
+
+deploy_release() {
+  local sha="$1"
+  fetch_commit "$sha"
+  build_release "$sha"
+  activate_release "$RELEASES_DIR/$sha"
+}
+
+rollback_release() {
+  local sha="$1"
+  local target="$RELEASES_DIR/$sha"
+  [[ -d "$target" && ! -L "$target" ]] || {
+    echo 'requested release does not exist' >&2
+    return 1
+  }
+  [[ "$(stat -c '%U:%G' "$target")" == 'root:wiki-arcana' ]] || {
+    echo 'requested release ownership is invalid' >&2
+    return 1
+  }
+  activate_release "$target"
+}
+
+with_deploy_lock() {
+  install -d -o root -g root -m 0755 /run/lock
+  exec 9>"$LOCK_FILE"
+  flock -n 9 || { echo 'another wiki-arcana deployment is running' >&2; return 1; }
+  "$@"
+}
+
+main() {
+  [[ "$(id -u)" -eq 0 ]] || { echo 'must run as root' >&2; return 1; }
+  validate_arguments "$@" || { echo 'invalid broker command or arguments' >&2; return 2; }
+  case "${1:-}" in
+    deploy)
+      local sha
+      sha="$(normalise_sha "$2")" || return $?
+      with_deploy_lock deploy_release "$sha"
+      ;;
+    rollback)
+      local sha
+      sha="$(normalise_sha "$2")" || return $?
+      with_deploy_lock rollback_release "$sha"
+      ;;
+    health)
+      health_check
+      ;;
+    status)
+      if [[ -L "$CURRENT_LINK" ]]; then
+        printf 'current=%s\n' "$(readlink -f -- "$CURRENT_LINK")"
+      else
+        echo 'current=none'
+        return 1
+      fi
+      ;;
+    *)
+      return 2
+      ;;
+  esac
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  main "$@"
+fi
