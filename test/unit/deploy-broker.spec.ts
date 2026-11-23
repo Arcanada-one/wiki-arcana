@@ -59,9 +59,9 @@ describe('wiki-arcana deployment broker', () => {
 
     const script = [
       'source "$1"',
-      'probe_marker="$WIKI_ARCANA_BROKER_TEST_ROOT/first-probe"',
       'systemctl() { return 0; }',
-      'curl() { local url="${@: -1}"; if [[ "$url" == */health && ! -e "$probe_marker" ]]; then : > "$probe_marker"; return 22; fi; return 0; }',
+      'sleep() { :; }',
+      'curl() { if [[ "$(readlink -f "$CURRENT_LINK")" == *candidate ]]; then return 22; fi; return 0; }',
       'if activate_release "$WIKI_ARCANA_BROKER_TEST_ROOT/apps/wiki-arcana/releases/candidate"; then exit 1; fi',
       '[[ "$(readlink -f "$CURRENT_LINK")" == "$WIKI_ARCANA_BROKER_TEST_ROOT/apps/wiki-arcana/releases/previous" ]]',
     ].join('\n');

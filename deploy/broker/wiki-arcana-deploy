@@ -50,8 +50,18 @@ validate_arguments() {
 }
 
 health_check() {
-  curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4110/health >/dev/null &&
-    curl --fail --silent --show-error --max-time 15 http://127.0.0.1:4110/version >/dev/null
+  local attempt
+  for attempt in {1..10}; do
+    if curl --fail --silent --show-error --connect-timeout 1 --max-time 2 http://127.0.0.1:4110/health >/dev/null &&
+      curl --fail --silent --show-error --connect-timeout 1 --max-time 2 http://127.0.0.1:4110/version >/dev/null; then
+      return 0
+    fi
+    if (( attempt == 10 )); then
+      break
+    fi
+    sleep 2
+  done
+  return 1
 }
 
 atomic_current_link() {
