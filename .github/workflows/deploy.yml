@@ -86,7 +86,7 @@ jobs:
           ops-bot-key: ${{ env.OPSBOT_KEY }}
           severity-overrides: ${{ vars.PREFLIGHT_ARCANA_PROD_OVERRIDES_JSON }}
       - name: Deploy immutable commit to local production host
-        run: scripts/deploy-local.sh "${GITHUB_SHA}"
+        run: sudo -n /usr/local/sbin/wiki-arcana-deploy deploy "${GITHUB_SHA}"
       - name: Post-deploy health
         run: |
           set -euo pipefail
