@@ -47,12 +47,9 @@ afterEach(() => {
 describe('wiki-arcana installer access probes', () => {
   const runner = 'ci-runner-deploy';
   const denied = `User ${runner} is not allowed to run sudo on arcana-prd.`;
-  const allowed = [
-    `Matching Defaults entries for ${runner} on arcana-prd:`,
-    '    env_reset, mail_badpass',
-    `User ${runner} may run the following commands on arcana-prd:`,
-    '    (root) NOPASSWD: NOSETENV: /usr/local/sbin/wiki-arcana-deploy health',
-  ].join('\n');
+  const systemctlCommand = [runner, '/usr/bin/systemctl', 'restart', 'wiki-arcana.service'];
+  const brokerHealthCommand = [runner, '/usr/local/sbin/wiki-arcana-deploy', 'health'];
+  const allowed = '/usr/local/sbin/wiki-arcana-deploy health';
   let standardPath: string;
 
   beforeEach(() => {
@@ -63,18 +60,21 @@ describe('wiki-arcana installer access probes', () => {
     });
   });
 
-  it('treats only the exact sudo denial as denied and validates allowed listings', () => {
+  it('accepts empty denial and exact full-path success output for command probes', () => {
     const exactDenialPath = createProbePath({
       sudo: outputStub(),
       hostname: '#!/bin/sh\nprintf arcana-prd\n',
     });
-    expect(runProbe('probe_sudo_access', [runner, '/usr/bin/systemctl restart wiki-arcana.service', '/usr/bin/systemctl', 'restart', 'wiki-arcana.service'], exactDenialPath, denied, 1).status).toBe(1);
-    expect(runProbe('probe_sudo_access', [runner, '/usr/bin/systemctl restart wiki-arcana.service', '/usr/bin/systemctl', 'restart', 'wiki-arcana.service'], exactDenialPath, `${denied}\nextra`, 1).status).toBe(2);
-    expect(runProbe('probe_sudo_access', [runner, '/usr/bin/systemctl restart wiki-arcana.service', '/usr/bin/systemctl', 'restart', 'wiki-arcana.service'], exactDenialPath, 'sudo: unknown user', 1).status).toBe(2);
+    expect(runProbe('probe_sudo_access', systemctlCommand, exactDenialPath, denied, 1).status).toBe(1);
+    expect(runProbe('probe_sudo_access', systemctlCommand, exactDenialPath, '', 1).status).toBe(1);
+    expect(runProbe('probe_sudo_access', [runner], exactDenialPath, '', 1).status).toBe(2);
+    expect(runProbe('probe_sudo_access', systemctlCommand, exactDenialPath, `${denied}\nextra`, 1).status).toBe(2);
+    expect(runProbe('probe_sudo_access', systemctlCommand, exactDenialPath, 'sudo: unknown user', 1).status).toBe(2);
 
-    expect(runProbe('probe_sudo_access', [runner, '/usr/local/sbin/wiki-arcana-deploy health', '/usr/local/sbin/wiki-arcana-deploy', 'health'], standardPath, allowed, 0).status).toBe(0);
-    expect(runProbe('probe_sudo_access', [runner, '/usr/local/sbin/wiki-arcana-deploy health', '/usr/local/sbin/wiki-arcana-deploy', 'health'], standardPath, 'unrecognized report', 0).status).toBe(2);
-    expect(runProbe('probe_sudo_access', [runner, '/usr/local/sbin/wiki-arcana-deploy health', '/usr/local/sbin/wiki-arcana-deploy', 'health'], standardPath, denied, 2).status).toBe(2);
+    expect(runProbe('probe_sudo_access', brokerHealthCommand, standardPath, allowed, 0).status).toBe(0);
+    expect(runProbe('probe_sudo_access', brokerHealthCommand, standardPath, `${allowed}\nextra`, 0).status).toBe(2);
+    expect(runProbe('probe_sudo_access', brokerHealthCommand, standardPath, 'unrecognized report', 0).status).toBe(2);
+    expect(runProbe('probe_sudo_access', brokerHealthCommand, standardPath, denied, 2).status).toBe(2);
   });
 
   it('treats expected runuser permission denial as unreadable and aborts on probe errors', () => {
@@ -100,7 +100,7 @@ describe('wiki-arcana installer access probes', () => {
     expect(missingRunuser.stderr).toContain('runuser access probe command is missing');
 
     const missingHostname = createProbePath({ sudo: outputStub() });
-    const hostnameFailure = runProbe('probe_sudo_access', [runner, '/usr/bin/systemctl restart wiki-arcana.service', '/usr/bin/systemctl', 'restart', 'wiki-arcana.service'], missingHostname, denied, 1);
+    const hostnameFailure = runProbe('probe_sudo_access', systemctlCommand, missingHostname, denied, 1);
     expect(hostnameFailure.status).toBe(2);
     expect(hostnameFailure.stderr).toContain('unexpected denial output');
 
@@ -115,6 +115,6 @@ describe('wiki-arcana installer access probes', () => {
     expect(installer).toContain('require_access_probe_binaries || exit 1');
     expect(installer).toContain('probe_runuser_read_access "$BUILD_USER" "$ENVIRONMENT_FILE"');
     expect(installer).toContain("/usr/bin/systemctl restart wiki-arcana.service");
-    expect(installer).toContain('probe_sudo_access "$RUNNER_USER" "$BROKER_PATH $broker_verb"');
+    expect(installer).toContain('probe_sudo_access "$RUNNER_USER" "${probe_args[@]}"');
   });
 });
